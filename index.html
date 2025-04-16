@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jexploit</title>
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #6e8efb, #a777e3);
+      --secondary-gradient: linear-gradient(135deg, #21D4FD, #2152FF);
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-bg-dark: rgba(20, 20, 30, 0.85);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-bg-dark: rgba(30, 30, 45, 0.9);
+      --text-color: #333;
+      --text-color-dark: #eee;
+      --border-radius: 12px;
+      --border: 1px solid rgba(255, 255, 255, 0.2);
+      --border-dark: 1px solid rgba(255, 255, 255, 0.1);
+      --method-get: #10B981;
+      --method-post: #3B82F6;
+      --method-put: #F59E0B;
+      --method-delete: #EF4444;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-color);
+      background: #f0f2f5;
+      padding-top: 70px;
+      transition: var(--transition);
+    }
+
+    body.dark-mode {
+      background: #111827;
+      color: var(--text-color-dark);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header Styles */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: 15px 0;
+      border-bottom: var(--border);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .dark-mode header {
+      background: var(--glass-bg-dark);
+      border-bottom: var(--border-dark);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--primary-gradient);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      background: var(--glass-bg);
+      transition: var(--transition);
+    }
+
+    .dark-mode .theme-toggle {
+      background: var(--glass-bg-dark);
+    }
+
+    /* Navigation Styles */
+    nav {
+      background: var(--glass-bg);
+      backdrop-filter: blur(8px);
+      padding: 10px 20px;
+      border-radius: var(--border-radius);
+      margin: 20px 0;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 80px;
+      z-index: 90;
+      transition: var(--transition);
+    }
+
+    .dark-mode nav {
+      background: var(--glass-bg-dark);
+    }
+
+    .nav-list {
+      display: flex;
+      list-style: none;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 5px;
+    }
+
+    .nav-item {
+      white-space: nowrap;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: inherit;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover {
+      background: var(--glass-bg);
+    }
+
+    .dark-mode .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Main Content Styles */
+    .intro {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .intro h2 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    .intro p {
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.8;
+    }
+
+    .search-container {
+      margin: 30px auto;
+      max-width: 500px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 15px 20px;
+      padding-left: 45px;
+      border-radius: var(--border-radius);
+      border: none;
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .dark-mode .search-input {
+      background: var(--card-bg-dark);
+      color: var(--text-color-dark);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.6;
+    }
+
+    /* Category Styles */
+    .category {
+      margin-bottom: 60px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.6s forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .category-header {
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .category-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--secondary-gradient);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      color: white;
+    }
+
+    .category-title {
+      font-size: 1.8rem;
+    }
+
+    .endpoints {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    /* Endpoint Card Styles */
+    .endpoint-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .dark-mode .endpoint-card {
+      background: var(--card-bg-dark);
+    }
+
+    .endpoint-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .endpoint-header {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .dark-mode .endpoint-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .endpoint-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+    }
+
+    .method-badge {
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .method-get {
+      background-color: var(--method-get);
+    }
+
+    .method-post {
+      background-color: var(--method-post);
+    }
+
+    .method-put {
+      background-color: var(--method-put);
+    }
+
+    .method-delete {
+      background-color: var(--method-delete);
+    }
+
+    .endpoint-body {
+      padding: 20px;
+    }
+
+    .endpoint-url {
+      background: rgba(0, 0, 0, 0.03);
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-family: monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      overflow-x: auto;
+    }
+
+    .dark-mode .endpoint-url {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .copy-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: var(--transition);
+    }
+
+    .copy-btn:hover {
+      opacity: 1;
+    }
+
+    .endpoint-description {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .code-block {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .code-block.expanded {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .toggle-code {
+      background: rgba(0, 0, 0, 0.05);
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      transition: var(--transition);
+    }
+
+    .dark-mode .toggle-code {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-color-dark);
+    }
+
+    .toggle-code:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .toggle-code:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Animation for cards */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fadeup {
+      animation: fadeUp 0.5s ease forwards;
+    }
+  </style>
+</head>
+<body>
+  
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <div class="logo-icon">🌸</div>
+        <h1>Jexploit API</h1>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 2V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 20V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4.93 4.93L6.34 6.34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M17.66 17.66L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 12H4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6.34 17.66L4.93 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M19.07 4.93L17.66 6.34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+
+  <div class="container">
+    <div class="intro animate-fadeup">
+      <h2>Jexploit API</h2>
+      <p>Jexploit Api is a provider of various feature endpoints for Whatsapp Botz, and has been simplified for easy use.</p>
+    </div>
+
+    
+    <div class="search-container animate-fadeup">
+      <input type="text" class="search-input" id="search-input" placeholder="Search for endpoints...">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    
+    <nav>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="#character-generation" class="nav-link">Character Generation</a></li>
+        <li class="nav-item"><a href="#style-transfer" class="nav-link">Style Transfer</a></li>
+        <li class="nav-item"><a href="#image-analysis" class="nav-link">Image Analysis</a></li>
+        <li class="nav-item"><a href="#content-creation" class="nav-link">Content Creation</a></li>
+        <li class="nav-item"><a href="#authentication" class="nav-link">Authentication</a></li>
+      </ul>
+    </nav>
+
+    <section id="style-transfer" class="category">
+      <div class="category-header">
+        <div class="category-icon">💱</div>
+        <h2 class="category-title">Orkut API</h2>
+      </div>
+
+      <div class="endpoints">
+       
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <div class="endpoint-title">
+              <span class="method-badge method-get">GET</span>
+              Available Styles
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <div class="endpoint-url">
+              <span>/api/orkut/createpayment?apiKey=&amount=&codeqr=</span>
+              <button class="copy-btn" aria-label="Copy URL">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 4V16C8 16.5304 8.21071 17.0391 8.58579 17.4142C8.96086 17.7893 9.46957 18 10 18H18C18.5304 18 19.0391 17.7893 19.4142 17.4142C19.7893 17.0391 20 16.5304 20 16V7.242C20 6.97556 19.9467 6.71181 19.8433 6.46624C19.7399 6.22068 19.5885 5.99824 19.398 5.812L16.188 2.602C15.8129 2.22698 15.3092 2.0157 14.782 2H10C9.46957 2 8.96086 2.21071 8.58579 2.58579C8.21071 2.96086 8 3.46957 8 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 18V20C16 20.5304 15.7893 21.0391 15.4142 21.4142C15.0391 21.7893 14.5304 22 14 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V9C4 8.46957 4.21071 7.96086 4.58579 7.58579C4.96086 7.21071 5.46957 7 6 7H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+<p class="endpoint-description">
+              Get Order Kouta automated service to make online store integration easier.
+            </p>
+            <button class="toggle-code">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 18L22 12L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 6L2 12L8 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Example Response
+            </button>
+            <div class="code-block">
+{
+  "status": true,
+  "creator": "jexploit",
+  "result": {
+    "transactionId": "7AC13EB8FE",
+    "amount": "5000",
+    "expirationTime": "2025-04-12T02:23:26.109Z",
+    "qrImageUrl": "https://img1.pixhost.to/images/4965/586998212_jexploit.png"
+  }
+}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+  
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    });
+
+    
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+    document.querySelectorAll('.toggle-code').forEach(button => {
+      button.addEventListener('click', () => {
+        const codeBlock = button.nextElementSibling;
+        codeBlock.classList.toggle('expanded');
+//chanl:https://whatsapp.com/channel/0029VanrndJICVfcrjFr3x2R//
+        const toggleText = button.innerHTML.includes('Example') ? 
+          button.innerHTML.replace('Example', 'Hide') : 
+          button.innerHTML.replace('Hide', 'Example');
+        
+        button.innerHTML = toggleText;
+      });
+    });
+//chanell:https://whatsapp.com/channel/0029VanrndJICVfcrjFr3x2R//
+    const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('input', () => {
+      const searchTerm = searchInput.value.toLowerCase();
+      document.querySelectorAll('.endpoint-card').forEach(card => {
+        const title = card.querySelector('.endpoint-title').textContent.toLowerCase();
+        const description = card.querySelector('.endpoint-description').textContent.toLowerCase();
+        const url = card.querySelector('.endpoint-url').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || description.includes(searchTerm) || url.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      document.querySelectorAll('.category').forEach(category => {
+        const visibleEndpoints = Array.from(category.querySelectorAll('.endpoint-card'))
+          .filter(card => card.style.display !== 'none').length;
+        
+        category.style.display = visibleEndpoints > 0 ? 'block' : 'none';
+      });
+    });
+//chanell:https://whatsapp.com/channel/0029VanrndJICVfcrjFr3x2R//
+    document.querySelectorAll('.copy-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const url = button.previousElementSibling.textContent;
+        navigator.clipboard.writeText(url);
+        
+        // Show toast notification (simplified)
+        alert('URL copied to clipboard!');
+      });
+    });
+//chanell:https://whatsapp.com/channel/0029VanrndJICVfcrjFr3x2R//
+    document.querySelectorAll('.endpoint-card').forEach((card, index) => {
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.classList.add('animate-fadeup');
+    });
+  </script>
+</body>
+</html>
+ 
